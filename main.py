@@ -1,3 +1,4 @@
+
 import pandas as pd
 
 data=pd.read_csv("data/books.csv")
@@ -27,7 +28,8 @@ def menu():
     print("2. Dataset Info")
     print("3. Statistics")
     print("4. Filter Books")
-    print("5. Exit")
+    print("5. Choose Book by Title")
+    print("6. Exit")
 
     while True:
         choice = int(input("Enter your choice: "))
@@ -55,9 +57,17 @@ def menu():
             if rating:
                 Filtered_df=Filtered_df[Filtered_df['Rating']>=float(rating)]
             print("found",len(Filtered_df),"match/matches")
-            Filtered_df.sort_values(by='Rating',ascending=False,inplace=True)
+            Filtered_df=Filtered_df.sort_values(by='Rating',ascending=False)
             print(Filtered_df[['Title','Author','Rating']])
-        elif choice == 5:
+        if choice == 5:
+            print("Enter the title")
+            title = input("Title: ")
+            results = df[df['Title'].str.contains(title, case=False)]
+            if not results.empty:
+                print(results)
+            else:
+                print("No results found.")
+        elif choice == 6:
             print("Exiting the program.")
             break
 menu()

@@ -55,7 +55,8 @@ def menu():
             if rating:
                 Filtered_df=Filtered_df[Filtered_df['Rating']>=float(rating)]
             print("found",len(Filtered_df),"match/matches")
-            print(Filtered_df)
+            Filtered_df.sort_values(by='Rating',ascending=False,inplace=True)
+            print(Filtered_df[['Title','Author','Rating']])
         elif choice == 5:
             print("Exiting the program.")
             break

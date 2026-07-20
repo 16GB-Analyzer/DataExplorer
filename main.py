@@ -1,5 +1,6 @@
 
 import pandas as pd
+import matplotlib.pyplot as plt
 
 data=pd.read_csv("data/books.csv")
 df=pd.DataFrame(data)
@@ -21,15 +22,35 @@ print(
       (df['Year']>2015)
     ]
 )"""
+def visualize_data(df):
+    plt.figure(figsize=(8,6))
+    #df['Genre'].value_counts().plot(kind='bar')
+    #df.groupby('Genre')['Rating'].mean().plot(kind='bar')
+    #year_counts = df['Year'].value_counts().sort_index()
+    top_books = df.sort_values(by='Rating', ascending=False).head(10)
+    #year_counts.plot(kind='bar')
 
+    """plt.xlabel('Title')
+    plt.ylabel('Count')
+    plt.title("Number of Books by Year")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig("data/genre_distribution.png")"""
+    top_books.plot(
+        x='Title',
+        y='Rating',
+        kind='barh'
+    )
+    plt.show()
 def menu():
     print("====== Data Explorer ======")
     print("1. View Dataset")
     print("2. Dataset Info")
     print("3. Statistics")
     print("4. Filter Books")
-    print("5. Choose Book by Title")
-    print("6. Exit")
+    print("5. Visualize Data")
+    print("6. Choose Book by Title")
+    print("7. Exit")
 
     while True:
         choice = int(input("Enter your choice: "))
@@ -56,15 +77,19 @@ def menu():
                 Filtered_df=Filtered_df[Filtered_df['Year']==int(year)]
             if rating:
                 Filtered_df=Filtered_df[Filtered_df['Rating']>=float(rating)]
+                Filtered_df.sort_values(by='Rating',ascending=False)
+
             print("found",len(Filtered_df),"match/matches")
             storing = input("Do you want to store the filtered data? (y/n): ")
             if storing.lower()=='y':
                 Filtered_df.to_csv("data/filtered_books.csv", index=False)
+                print(Filtered_df[['Title','Author','Rating']])
                 print("Filtered data stored in 'data/filtered_books.csv'.")
-
-            Filtered_df.sort_values(by='Rating',ascending=False)
-            print(Filtered_df[['Title','Author','Rating']])
+            
         if choice == 5:
+            visualize_data(df)
+
+        if choice == 6:
             print("Enter the title")
             title = input("Title: ")
             results = df[df['Title'].str.contains(title, case=False)]
@@ -72,7 +97,7 @@ def menu():
                 print(results)
             else:
                 print("No results found.")
-        elif choice == 6:
+        elif choice == 7:
             print("Exiting the program.")
             break
 

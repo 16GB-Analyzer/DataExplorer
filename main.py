@@ -57,7 +57,12 @@ def menu():
             if rating:
                 Filtered_df=Filtered_df[Filtered_df['Rating']>=float(rating)]
             print("found",len(Filtered_df),"match/matches")
-            Filtered_df=Filtered_df.sort_values(by='Rating',ascending=False)
+            storing = input("Do you want to store the filtered data? (y/n): ")
+            if storing.lower()=='y':
+                Filtered_df.to_csv("data/filtered_books.csv", index=False)
+                print("Filtered data stored in 'data/filtered_books.csv'.")
+
+            Filtered_df.sort_values(by='Rating',ascending=False)
             print(Filtered_df[['Title','Author','Rating']])
         if choice == 5:
             print("Enter the title")
@@ -70,4 +75,5 @@ def menu():
         elif choice == 6:
             print("Exiting the program.")
             break
+
 menu()
